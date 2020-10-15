@@ -1,0 +1,67 @@
+name: 'Coverlet-MsBuild'
+description: 'Runs the Coverlet project using dotnet test.'
+author: 'Glenn Watson'
+inputs:
+  project-files:
+    description: 'Projects to build for.'
+    required: true
+  follow-symbolic-links:
+    description: 'Indicates whether to follow symbolic links'
+    default: 'true'
+    required: false
+  no-build:
+    description: 'Indicates to not build the output'
+    required: false
+  use-sourcelink:
+    description: 'Specifies if Coverlet will generate results that contain the URL to the source files in your source control instead of absolute file paths.'
+    required: false
+  exclude-filter:
+    description: 'Specifies a filter to exclude from the results.'
+    required: false
+  exclude-by-attribute:
+    description: 'Specifies a attribute to exclude results by.'
+    required: false
+  exclude-by-file:
+    description: 'A glob pattern for files to exclude.'
+    required: false
+  include-filter:
+    description: 'Specifies a filter to include in the results.'
+    required: false
+  skip-auto-props:
+    description: 'Specifies if coverlet will neither track nor record auto-implemented properties.'
+    required: false
+  output-format:
+    description: |
+      Specifies the end output format.
+      Supported formats include:
+      * json (default)
+      * lcov
+      * opencover
+      * cobertura
+      * teamcity
+    required: false
+  output:
+    description: Specify a directory where all results will be written to (especially if using multiple formats), end the value with a `/`.
+    required: false
+  merge-with:
+    description: Specify a file to combine multiple coverage results into one. Must be specified in JSON format. This GitHub action will combine all your projects into the desired output if this value is specified.
+    required: false
+  threshold:
+    description: A threshold where the build will fail if coverage is below this number.
+    required: false
+  threshold-type:
+    description: |
+      Specifies the type to calculate the threshold. The types supported are:
+      * Minimum (Default): Ensures the coverage result of each module isn't less than the threshold
+      * Total: Ensures the total combined coverage result of all modules isn't less than the threshold
+      * Average: Ensures the average coverage result of all modules isn't less than the threshold
+    required: false
+  does-not-return-attribute:
+    description: |
+      Methods that do not return can be marked with attributes to cause statements after them to be excluded from coverage. DoesNotReturnAttribute is included by default.
+
+      Attributes can be specified with the following syntax. Syntax: /p:DoesNotReturnAttribute="DoesNotReturnAttribute,OtherAttribute"
+    required: false    
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
