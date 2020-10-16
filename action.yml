@@ -12,6 +12,12 @@ inputs:
   no-build:
     description: 'Indicates to not build the output'
     required: false
+  configuration:
+    description: 'The dotnet configuration level'
+    required: false
+  framework:
+    description: 'The dotnet framework to use when testing'
+    required: false
   use-sourcelink:
     description: 'Specifies if Coverlet will generate results that contain the URL to the source files in your source control instead of absolute file paths.'
     required: false

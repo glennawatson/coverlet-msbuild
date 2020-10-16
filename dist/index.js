@@ -89,6 +89,12 @@ function run() {
             if (settings_1.Inputs.output) {
                 defaultArgs.push(`/p:CoverletOutput="${settings_1.Inputs.output}"`);
             }
+            if (settings_1.Inputs.configuration) {
+                defaultArgs.push('--configuration', settings_1.Inputs.configuration);
+            }
+            if (settings_1.Inputs.framework) {
+                defaultArgs.push('--framework', settings_1.Inputs.framework);
+            }
             const files = new Array();
             try {
                 for (var _b = __asyncValues(globber.globGenerator()), _c; _c = yield _b.next(), !_c.done;) {
@@ -181,6 +187,14 @@ class Inputs {
     }
     static get excludeFilter() {
         const result = core.getInput('exclude-filter');
+        return result === '' || result === null ? undefined : result;
+    }
+    static get configuration() {
+        const result = core.getInput('configuration');
+        return result === '' || result === null ? undefined : result;
+    }
+    static get framework() {
+        const result = core.getInput('framework');
         return result === '' || result === null ? undefined : result;
     }
     static get excludeByAttribute() {
