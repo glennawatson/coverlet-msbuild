@@ -77,9 +77,6 @@ function run() {
             if (settings_1.Inputs.skipAutoProps) {
                 defaultArgs.push(`/p:SkipAutoProps=${settings_1.Inputs.skipAutoProps}`);
             }
-            if (settings_1.Inputs.outputFormat) {
-                defaultArgs.push(`/p:CoverletOutputFormat=${settings_1.Inputs.outputFormat}`);
-            }
             if (settings_1.Inputs.threshold) {
                 defaultArgs.push(`/p:Threshold=${settings_1.Inputs.threshold}`);
             }
@@ -88,6 +85,9 @@ function run() {
             }
             if (settings_1.Inputs.doesNotReturnAttribute) {
                 defaultArgs.push(`/p:DoesNotReturnAttribute="${settings_1.Inputs.doesNotReturnAttribute}"`);
+            }
+            if (settings_1.Inputs.output) {
+                defaultArgs.push(`/p:CoverletOutput="${settings_1.Inputs.output}"`);
             }
             const files = new Array();
             try {
@@ -106,14 +106,14 @@ function run() {
             for (let i = 0; i < files.length; ++i) {
                 const runArgs = [...defaultArgs];
                 const currentFile = files[i];
-                if (i !== 0) {
-                    if (settings_1.Inputs.mergeWith) {
+                if (settings_1.Inputs.mergeWith) {
+                    if (i !== 0) {
                         runArgs.push(`/p:MergeWith="${settings_1.Inputs.mergeWith}"`);
                     }
                 }
-                if (i === files.length - 1) {
-                    if (settings_1.Inputs.output) {
-                        runArgs.push(`/p:CoverletOutput="${settings_1.Inputs.output}"`);
+                if (settings_1.Inputs.mergeWith === undefined || i === files.length - 1) {
+                    if (settings_1.Inputs.outputFormat) {
+                        runArgs.push(`/p:CoverletOutputFormat=${settings_1.Inputs.outputFormat}`);
                     }
                 }
                 runArgs.push(currentFile);
