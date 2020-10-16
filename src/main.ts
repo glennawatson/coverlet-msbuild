@@ -43,10 +43,6 @@ async function run(): Promise<void> {
       defaultArgs.push(`/p:SkipAutoProps=${Inputs.skipAutoProps}`);
     }
 
-    if (Inputs.outputFormat) {
-      defaultArgs.push(`/p:CoverletOutputFormat=${Inputs.outputFormat}`);
-    }
-
     if (Inputs.threshold) {
       defaultArgs.push(`/p:Threshold=${Inputs.threshold}`);
     }
@@ -61,6 +57,10 @@ async function run(): Promise<void> {
       );
     }
 
+    if (Inputs.output) {
+      defaultArgs.push(`/p:CoverletOutput="${Inputs.output}"`);
+    }
+
     const files = new Array<string>();
 
     for await (const file of globber.globGenerator()) {
@@ -71,15 +71,15 @@ async function run(): Promise<void> {
       const runArgs = [...defaultArgs];
       const currentFile = files[i];
 
-      if (i !== 0) {
-        if (Inputs.mergeWith) {
+      if (Inputs.mergeWith) {
+        if (i !== 0) {
           runArgs.push(`/p:MergeWith="${Inputs.mergeWith}"`);
         }
       }
 
-      if (i === files.length - 1) {
-        if (Inputs.output) {
-          runArgs.push(`/p:CoverletOutput="${Inputs.output}"`);
+      if (Inputs.mergeWith === undefined || i === files.length - 1) {
+        if (Inputs.outputFormat) {
+          runArgs.push(`/p:CoverletOutputFormat=${Inputs.outputFormat}`);
         }
       }
 
