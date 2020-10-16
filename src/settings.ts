@@ -37,6 +37,18 @@ export class Inputs {
     return result === '' || result === null ? undefined : result;
   }
 
+  public static get configuration(): string | undefined {
+    const result = core.getInput('configuration');
+
+    return result === '' || result === null ? undefined : result;
+  }
+
+  public static get framework(): string | undefined {
+    const result = core.getInput('framework');
+
+    return result === '' || result === null ? undefined : result;
+  }
+
   public static get excludeByAttribute(): string | undefined {
     const result = core.getInput('exclude-by-attribute');
 

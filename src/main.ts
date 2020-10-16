@@ -61,6 +61,14 @@ async function run(): Promise<void> {
       defaultArgs.push(`/p:CoverletOutput="${Inputs.output}"`);
     }
 
+    if (Inputs.configuration) {
+      defaultArgs.push('--configuration', Inputs.configuration);
+    }
+
+    if (Inputs.framework) {
+      defaultArgs.push('--framework', Inputs.framework);
+    }
+
     const files = new Array<string>();
 
     for await (const file of globber.globGenerator()) {
