@@ -1,6 +1,7 @@
 import * as core from '@actions/core';
 import * as glob from '@actions/glob';
 import * as path from 'path';
+import resolveCwd from 'resolve-cwd';
 import {exec} from '@actions/exec';
 import {Inputs} from './settings';
 
@@ -77,7 +78,11 @@ async function run(): Promise<void> {
       let currentFile = files[i];
 
       if (Inputs.workingDirectory) {
-        currentFile = path.relative(Inputs.workingDirectory, currentFile);
+        const workingDirectory = path.resolve(
+          resolveCwd(Inputs.workingDirectory)
+        );
+
+        currentFile = path.relative(workingDirectory, currentFile);
       }
 
       if (Inputs.mergeWith) {

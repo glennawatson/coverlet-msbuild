@@ -42,10 +42,14 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__webpack_require__(186));
 const glob = __importStar(__webpack_require__(90));
 const path = __importStar(__webpack_require__(622));
+const resolve_cwd_1 = __importDefault(__webpack_require__(414));
 const exec_1 = __webpack_require__(514);
 const settings_1 = __webpack_require__(286);
 function run() {
@@ -111,7 +115,8 @@ function run() {
                 const runArgs = [...defaultArgs];
                 let currentFile = files[i];
                 if (settings_1.Inputs.workingDirectory) {
-                    currentFile = path.relative(settings_1.Inputs.workingDirectory, currentFile);
+                    const workingDirectory = path.resolve(resolve_cwd_1.default(settings_1.Inputs.workingDirectory));
+                    currentFile = path.relative(workingDirectory, currentFile);
                 }
                 if (settings_1.Inputs.mergeWith) {
                     if (i !== 0) {
@@ -3979,6 +3984,74 @@ function regExpEscape (s) {
 
 /***/ }),
 
+/***/ 414:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+const resolveFrom = __webpack_require__(813);
+
+module.exports = moduleId => resolveFrom(process.cwd(), moduleId);
+module.exports.silent = moduleId => resolveFrom.silent(process.cwd(), moduleId);
+
+
+/***/ }),
+
+/***/ 813:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+const path = __webpack_require__(622);
+const Module = __webpack_require__(282);
+const fs = __webpack_require__(747);
+
+const resolveFrom = (fromDirectory, moduleId, silent) => {
+	if (typeof fromDirectory !== 'string') {
+		throw new TypeError(`Expected \`fromDir\` to be of type \`string\`, got \`${typeof fromDirectory}\``);
+	}
+
+	if (typeof moduleId !== 'string') {
+		throw new TypeError(`Expected \`moduleId\` to be of type \`string\`, got \`${typeof moduleId}\``);
+	}
+
+	try {
+		fromDirectory = fs.realpathSync(fromDirectory);
+	} catch (error) {
+		if (error.code === 'ENOENT') {
+			fromDirectory = path.resolve(fromDirectory);
+		} else if (silent) {
+			return;
+		} else {
+			throw error;
+		}
+	}
+
+	const fromFile = path.join(fromDirectory, 'noop.js');
+
+	const resolveFileName = () => Module._resolveFilename(moduleId, {
+		id: fromFile,
+		filename: fromFile,
+		paths: Module._nodeModulePaths(fromDirectory)
+	});
+
+	if (silent) {
+		try {
+			return resolveFileName();
+		} catch (error) {
+			return;
+		}
+	}
+
+	return resolveFileName();
+};
+
+module.exports = (fromDirectory, moduleId) => resolveFrom(fromDirectory, moduleId);
+module.exports.silent = (fromDirectory, moduleId) => resolveFrom(fromDirectory, moduleId, true);
+
+
+/***/ }),
+
 /***/ 357:
 /***/ ((module) => {
 
@@ -4008,6 +4081,14 @@ module.exports = require("events");
 
 "use strict";
 module.exports = require("fs");
+
+/***/ }),
+
+/***/ 282:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("module");
 
 /***/ }),
 
