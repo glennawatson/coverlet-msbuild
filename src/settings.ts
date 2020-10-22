@@ -18,7 +18,7 @@ export class Inputs {
       return false;
     }
 
-    return result.toUpperCase() !== 'FALSE';
+    return result.toUpperCase() === 'TRUE';
   }
 
   public static get useSourcelink(): boolean | undefined {
@@ -28,7 +28,7 @@ export class Inputs {
       return undefined;
     }
 
-    return result.toUpperCase() !== 'FALSE';
+    return result.toUpperCase() === 'TRUE';
   }
 
   public static get excludeFilter(): string | undefined {
@@ -74,7 +74,7 @@ export class Inputs {
       return undefined;
     }
 
-    return result.toUpperCase() !== 'FALSE';
+    return result.toUpperCase() === 'TRUE';
   }
 
   public static get noBuild(): boolean | undefined {
@@ -84,7 +84,7 @@ export class Inputs {
       return undefined;
     }
 
-    return result.toUpperCase() !== 'FALSE';
+    return result.toUpperCase() === 'TRUE';
   }
 
   public static get outputFormat(): string | undefined {
