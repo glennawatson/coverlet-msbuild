@@ -1,5 +1,6 @@
 import * as core from '@actions/core';
 import * as glob from '@actions/glob';
+import * as path from 'path';
 import {exec} from '@actions/exec';
 import {Inputs} from './settings';
 
@@ -57,10 +58,6 @@ async function run(): Promise<void> {
       );
     }
 
-    if (Inputs.output) {
-      defaultArgs.push(`/p:CoverletOutput="${Inputs.output}"`);
-    }
-
     if (Inputs.configuration) {
       defaultArgs.push('--configuration', Inputs.configuration);
     }
@@ -83,9 +80,27 @@ async function run(): Promise<void> {
         if (i !== 0) {
           runArgs.push(`/p:MergeWith="${Inputs.mergeWith}"`);
         }
+
+        if (Inputs.output) {
+          runArgs.push(`/p:CoverletOutput=${Inputs.output}`);
+        }
       }
 
       if (Inputs.mergeWith === undefined || i === files.length - 1) {
+        if (Inputs.output) {
+          if (Inputs.output.endsWith('/') || Inputs.output.endsWith('\\')) {
+            const filenameParsed = path.parse(currentFile);
+            const filePath = path.join(
+              Inputs.output,
+              `${filenameParsed.name}.xml`
+            );
+
+            runArgs.push(`/p:CoverletOutput=${filePath}`);
+          } else {
+            runArgs.push(`/p:CoverletOutput=${Inputs.output}`);
+          }
+        }
+
         if (Inputs.outputFormat) {
           runArgs.push(`/p:CoverletOutputFormat=${Inputs.outputFormat}`);
         }

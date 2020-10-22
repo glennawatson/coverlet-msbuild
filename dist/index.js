@@ -45,6 +45,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__webpack_require__(186));
 const glob = __importStar(__webpack_require__(90));
+const path = __importStar(__webpack_require__(622));
 const exec_1 = __webpack_require__(514);
 const settings_1 = __webpack_require__(286);
 function run() {
@@ -86,9 +87,6 @@ function run() {
             if (settings_1.Inputs.doesNotReturnAttribute) {
                 defaultArgs.push(`/p:DoesNotReturnAttribute="${settings_1.Inputs.doesNotReturnAttribute}"`);
             }
-            if (settings_1.Inputs.output) {
-                defaultArgs.push(`/p:CoverletOutput="${settings_1.Inputs.output}"`);
-            }
             if (settings_1.Inputs.configuration) {
                 defaultArgs.push('--configuration', settings_1.Inputs.configuration);
             }
@@ -116,8 +114,21 @@ function run() {
                     if (i !== 0) {
                         runArgs.push(`/p:MergeWith="${settings_1.Inputs.mergeWith}"`);
                     }
+                    if (settings_1.Inputs.output) {
+                        runArgs.push(`/p:CoverletOutput=${settings_1.Inputs.output}`);
+                    }
                 }
                 if (settings_1.Inputs.mergeWith === undefined || i === files.length - 1) {
+                    if (settings_1.Inputs.output) {
+                        if (settings_1.Inputs.output.endsWith('/') || settings_1.Inputs.output.endsWith('\\')) {
+                            const filenameParsed = path.parse(currentFile);
+                            const filePath = path.join(settings_1.Inputs.output, `${filenameParsed.name}.xml`);
+                            runArgs.push(`/p:CoverletOutput=${filePath}`);
+                        }
+                        else {
+                            runArgs.push(`/p:CoverletOutput=${settings_1.Inputs.output}`);
+                        }
+                    }
                     if (settings_1.Inputs.outputFormat) {
                         runArgs.push(`/p:CoverletOutputFormat=${settings_1.Inputs.outputFormat}`);
                     }
@@ -176,14 +187,14 @@ class Inputs {
         if (result == null) {
             return false;
         }
-        return result.toUpperCase() !== 'FALSE';
+        return result.toUpperCase() === 'TRUE';
     }
     static get useSourcelink() {
         const result = core.getInput('use-sourcelink');
         if (result == null) {
             return undefined;
         }
-        return result.toUpperCase() !== 'FALSE';
+        return result.toUpperCase() === 'TRUE';
     }
     static get excludeFilter() {
         const result = core.getInput('exclude-filter');
@@ -214,14 +225,14 @@ class Inputs {
         if (result == null) {
             return undefined;
         }
-        return result.toUpperCase() !== 'FALSE';
+        return result.toUpperCase() === 'TRUE';
     }
     static get noBuild() {
         const result = core.getInput('no-build');
         if (result == null) {
             return undefined;
         }
-        return result.toUpperCase() !== 'FALSE';
+        return result.toUpperCase() === 'TRUE';
     }
     static get outputFormat() {
         const result = core.getInput('output-format');
