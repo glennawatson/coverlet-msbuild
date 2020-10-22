@@ -77,10 +77,10 @@ async function run(): Promise<void> {
       const runArgs = [...defaultArgs];
       let currentFile = files[i];
 
+      let workingDirectory = resolveCwd('.');
+
       if (Inputs.workingDirectory) {
-        const workingDirectory = path.resolve(
-          resolveCwd(Inputs.workingDirectory)
-        );
+        workingDirectory = path.resolve(resolveCwd(Inputs.workingDirectory));
 
         currentFile = path.relative(workingDirectory, currentFile);
       }
@@ -117,7 +117,9 @@ async function run(): Promise<void> {
 
       runArgs.push(currentFile);
 
-      await exec('dotnet', runArgs);
+      await exec('dotnet', runArgs, {
+        cwd: workingDirectory
+      });
     }
   } catch (error) {
     core.setFailed(error.message);

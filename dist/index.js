@@ -114,8 +114,9 @@ function run() {
             for (let i = 0; i < files.length; ++i) {
                 const runArgs = [...defaultArgs];
                 let currentFile = files[i];
+                let workingDirectory = resolve_cwd_1.default('.');
                 if (settings_1.Inputs.workingDirectory) {
-                    const workingDirectory = path.resolve(resolve_cwd_1.default(settings_1.Inputs.workingDirectory));
+                    workingDirectory = path.resolve(resolve_cwd_1.default(settings_1.Inputs.workingDirectory));
                     currentFile = path.relative(workingDirectory, currentFile);
                 }
                 if (settings_1.Inputs.mergeWith) {
@@ -142,7 +143,9 @@ function run() {
                     }
                 }
                 runArgs.push(currentFile);
-                yield exec_1.exec('dotnet', runArgs);
+                yield exec_1.exec('dotnet', runArgs, {
+                    cwd: workingDirectory
+                });
             }
         }
         catch (error) {
