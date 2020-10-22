@@ -11,6 +11,7 @@ inputs:
     required: false
   no-build:
     description: 'Indicates to not build the output'
+    default: 'false'
     required: false
   configuration:
     description: 'The dotnet configuration level'
@@ -20,6 +21,7 @@ inputs:
     required: false
   use-sourcelink:
     description: 'Specifies if Coverlet will generate results that contain the URL to the source files in your source control instead of absolute file paths.'
+    default: 'false'
     required: false
   exclude-filter:
     description: 'Specifies a filter to exclude from the results.'
@@ -35,6 +37,7 @@ inputs:
     required: false
   skip-auto-props:
     description: 'Specifies if coverlet will neither track nor record auto-implemented properties.'
+    default: 'false'
     required: false
   output-format:
     description: |
@@ -67,6 +70,9 @@ inputs:
       Methods that do not return can be marked with attributes to cause statements after them to be excluded from coverage. DoesNotReturnAttribute is included by default.
 
       Attributes can be specified with the following syntax. Syntax: /p:DoesNotReturnAttribute="DoesNotReturnAttribute,OtherAttribute"
+    required: false
+  working-directory:
+    description: The working directory for the individual projects.
     required: false    
 runs:
   using: 'node12'

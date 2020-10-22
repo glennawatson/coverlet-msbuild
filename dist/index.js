@@ -109,7 +109,10 @@ function run() {
             }
             for (let i = 0; i < files.length; ++i) {
                 const runArgs = [...defaultArgs];
-                const currentFile = files[i];
+                let currentFile = files[i];
+                if (settings_1.Inputs.workingDirectory) {
+                    currentFile = path.relative(settings_1.Inputs.workingDirectory, currentFile);
+                }
                 if (settings_1.Inputs.mergeWith) {
                     if (i !== 0) {
                         runArgs.push(`/p:MergeWith="${settings_1.Inputs.mergeWith}"`);
@@ -188,6 +191,10 @@ class Inputs {
             return false;
         }
         return result.toUpperCase() === 'TRUE';
+    }
+    static get workingDirectory() {
+        const result = core.getInput('working-directory');
+        return result === '' || result === null ? undefined : result;
     }
     static get useSourcelink() {
         const result = core.getInput('use-sourcelink');

@@ -21,6 +21,12 @@ export class Inputs {
     return result.toUpperCase() === 'TRUE';
   }
 
+  public static get workingDirectory(): string | undefined {
+    const result = core.getInput('working-directory');
+
+    return result === '' || result === null ? undefined : result;
+  }
+
   public static get useSourcelink(): boolean | undefined {
     const result = core.getInput('use-sourcelink');
 

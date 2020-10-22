@@ -74,7 +74,11 @@ async function run(): Promise<void> {
 
     for (let i = 0; i < files.length; ++i) {
       const runArgs = [...defaultArgs];
-      const currentFile = files[i];
+      let currentFile = files[i];
+
+      if (Inputs.workingDirectory) {
+        currentFile = path.relative(Inputs.workingDirectory, currentFile);
+      }
 
       if (Inputs.mergeWith) {
         if (i !== 0) {
