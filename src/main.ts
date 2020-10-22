@@ -1,7 +1,6 @@
 import * as core from '@actions/core';
 import * as glob from '@actions/glob';
 import * as path from 'path';
-import resolveCwd from 'resolve-cwd';
 import {exec} from '@actions/exec';
 import {Inputs} from './settings';
 
@@ -77,10 +76,13 @@ async function run(): Promise<void> {
       const runArgs = [...defaultArgs];
       let currentFile = files[i];
 
-      let workingDirectory = resolveCwd('.');
+      let workingDirectory = process.cwd();
 
       if (Inputs.workingDirectory) {
-        workingDirectory = path.resolve(resolveCwd(Inputs.workingDirectory));
+        workingDirectory = path.resolve(
+          workingDirectory,
+          Inputs.workingDirectory
+        );
 
         currentFile = path.relative(workingDirectory, currentFile);
       }
