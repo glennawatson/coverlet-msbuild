@@ -75,5 +75,5 @@ inputs:
     description: The working directory for the individual projects.
     required: false    
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
