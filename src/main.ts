@@ -117,7 +117,7 @@ async function run(): Promise<void> {
         }
       }
 
-      runArgs.unshift('test', currentFile);
+      runArgs.unshift('test', `"` + currentFile + `"`);
 
       await exec('dotnet', runArgs, {
         cwd: workingDirectory
