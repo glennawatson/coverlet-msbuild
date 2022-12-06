@@ -12,7 +12,7 @@ async function run(): Promise<void> {
 
     const globber = await glob.create(Inputs.projectFiles, globOptions);
 
-    const defaultArgs = ['test', '/p:CollectCoverage=true'];
+    const defaultArgs = ['/p:CollectCoverage=true'];
 
     if (Inputs.noBuild) {
       defaultArgs.push('--no-build');
@@ -117,7 +117,8 @@ async function run(): Promise<void> {
         }
       }
 
-      runArgs.push(currentFile);
+      runArgs.unshift(currentFile);
+      runArgs.unshift('test');
 
       await exec('dotnet', runArgs, {
         cwd: workingDirectory
